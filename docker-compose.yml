@@ -13,14 +13,14 @@ services:
       - PG_USER=postgres
       - PG_PASSWORD=postgres
       - PG_DB=postgres
-      - PG_PORT=5435
+      - PG_PORT=5432
     depends_on:
       - db
   db:
     container_name: db
     image: postgres:12
     ports:
-      - 5435:5432
+      - 5432:5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
