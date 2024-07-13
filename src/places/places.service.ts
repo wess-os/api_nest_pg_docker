@@ -18,7 +18,11 @@ export class PlacesService {
 
         try {
 
-            const places = await this.placesRepository.find();
+            const places = await this.placesRepository.find({
+                order: {
+                    name: 'ASC',
+                },
+            });
 
             if (!places) {
                 

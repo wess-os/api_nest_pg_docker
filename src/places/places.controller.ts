@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards } from '@nestjs/common';
 import { Place } from './places.entity';
 import { PlacesService } from './places.service';
+import { AuthenticationGuard } from 'src/guards/authentication.guard';
 
+@UseGuards(AuthenticationGuard)
 @Controller('places')
 export class PlacesController {
 

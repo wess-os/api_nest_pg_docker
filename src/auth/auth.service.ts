@@ -107,13 +107,13 @@ export class AuthService {
 
         }
 
-        const accessToken = sign({ id: userDb.id }, 'access_secret', {
+        const accessToken = sign({ id: userDb.id }, process.env.ACCESS_SECRET, {
 
             expiresIn: 60 * 60,
 
         });
 
-        const refreshToken = sign({ id: userDb.id }, 'refresh_secret', {
+        const refreshToken = sign({ id: userDb.id }, process.env.REFRESH_SECRET, {
 
             expiresIn: 24 * 60 * 60,
 
@@ -155,7 +155,7 @@ export class AuthService {
             
             }
             
-            const payload: any = verify(accessToken, 'access_secret');
+            const payload: any = verify(accessToken, process.env.ACCESS_SECRET);
         
             if (!payload) {
 
@@ -209,7 +209,7 @@ export class AuthService {
             
             }
 
-            const payload: any = verify(refreshToken, 'refresh_secret');
+            const payload: any = verify(refreshToken, process.env.REFRESH_SECRET);
         
             if (!payload) {
 
@@ -219,7 +219,7 @@ export class AuthService {
 
             }
         
-            const accessToken = sign({ id: payload.id }, 'access_secret', {
+            const accessToken = sign({ id: payload.id }, process.env.ACCESS_SECRET, {
 
                 expiresIn: 60 * 60,
 
@@ -257,6 +257,10 @@ export class AuthService {
             .status(200)
             .send({ message: 'logged out.' });
 
+    }
+
+    getSecret(): string {
+        return process.env.ACCESS_SECRET;
     }
 
 }
