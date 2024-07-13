@@ -1,14 +1,16 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
+import { User } from './users/users.entity';
+import { Place } from './places/places.entity';
+import { PlacesController } from './places/places.controller';
+import { PlacesService } from './places/places.service';
+import { AuthController } from './auth/auth.controller';
+import { AuthService } from './auth/auth.service';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(),
-    UsersModule,
     TypeOrmModule.forRoot({
       type: process.env.DB_TYPE as any,
       host: process.env.PG_HOST,
@@ -16,11 +18,20 @@ import { ConfigModule } from '@nestjs/config';
       username: process.env.PG_USER,
       password: process.env.PG_PASSWORD,
       database: process.env.PG_DB,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      entities: [User, Place],
       synchronize: true,
+      // type: 'postgres',
+      // host: 'localhost',
+      // port: 5432,
+      // username: 'db',
+      // password: 'postgres',
+      // database: 'postgres',
+      // entities: [User, Place],
+      // synchronize: true,
     }),
+    TypeOrmModule.forFeature([User, Place]),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, PlacesController, AuthController],
+  providers: [AppService, PlacesService, AuthService],
 })
 export class AppModule {}
