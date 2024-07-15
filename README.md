@@ -1,5 +1,5 @@
 # NestJS + PostgreSQL + Docker
-### A simple API to manage a list of users
+### A simple API to manage a list of places
 #### First time setup
 - docker compose up -d db
 - docker compose build
