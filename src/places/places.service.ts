@@ -84,23 +84,37 @@ export class PlacesService {
 
         }
 
-        if (existingPlace.name !== place.name) {
-            
-            const placeWithSameName = await this.placesRepository.findOne({ where: { name: place.name } });
+        // check if the new name already exists
+        if (place.name) {
 
-            if (placeWithSameName) {
-                
-                throw new HttpException('A place with this name already exists.', HttpStatus.CONFLICT);
+            if (existingPlace.name !== place.name) {
+
+                const placeWithSameName = await this.placesRepository.findOne({ where: { name: place.name } });
+    
+                if (placeWithSameName) {
+                    
+                    throw new HttpException('A place with this name already exists.', HttpStatus.CONFLICT);
+    
+                }
 
             }
 
         }
 
-        if (existingPlace.name === place.name &&
-            existingPlace.city === place.city &&
-            existingPlace.state === place.state) {
-                
-            throw new HttpException('No changes needed', HttpStatus.BAD_REQUEST);
+        // method to check if it is necessary to save something new, if it is the same thing not saved
+        switch (true) {
+            
+            case (existingPlace.name === place.name && existingPlace.city === place.city && existingPlace.state === place.state):
+            case (!place.name && place.state === existingPlace.state && place.city === existingPlace.city):
+            case (!place.city && place.name === existingPlace.name && place.state === existingPlace.state):
+            case (!place.state && place.city === existingPlace.city && place.name === existingPlace.name):
+            case (!place.name && !place.state && place.city === existingPlace.city):
+            case (!place.name && !place.city && place.state === existingPlace.state):
+            case (!place.city && !place.state && place.name === existingPlace.name):
+
+                throw new HttpException('No changes needed', HttpStatus.BAD_REQUEST);
+
+            break;
 
         }
 
